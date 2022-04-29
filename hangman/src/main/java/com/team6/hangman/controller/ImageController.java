@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.team6.hangman.dto.ImageRequestDto;
+import com.team6.hangman.dto.request.ImageRequestDto;
 import com.team6.hangman.entity.Image;
 import com.team6.hangman.service.ImageService;
 

@@ -4,7 +4,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.team6.hangman.dto.ImageRequestDto;
+import com.team6.hangman.dto.request.ImageRequestDto;
 import com.team6.hangman.entity.Image;
 import com.team6.hangman.repository.ImageRepository;
 
