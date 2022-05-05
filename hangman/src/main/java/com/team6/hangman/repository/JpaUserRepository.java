@@ -34,5 +34,4 @@ public class JpaUserRepository implements UserRepository{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 }

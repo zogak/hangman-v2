@@ -10,6 +10,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String id;
 	private String pw;
+	private String nickName;
 	
 	public String getId() {
 		return id;
@@ -23,5 +24,10 @@ public class User {
 	public void setPw(String pw) {
 		this.pw = pw;
 	}
-
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
 }
