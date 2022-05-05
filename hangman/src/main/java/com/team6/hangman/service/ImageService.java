@@ -28,4 +28,8 @@ public class ImageService {
 		
 		return true;
 	}
+	
+	public String getImageByOrder(Integer order) {
+		return imageRepository.getImageByImageOrder(order);
+	}
 }

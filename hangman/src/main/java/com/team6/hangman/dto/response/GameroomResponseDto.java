@@ -1,7 +1,5 @@
 package com.team6.hangman.dto.response;
 
-import com.team6.hangman.entity.Gameroom;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
