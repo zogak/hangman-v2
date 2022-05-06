@@ -1,3 +1,4 @@
+package com.team6.hangman.config;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
