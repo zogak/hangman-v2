@@ -5,7 +5,7 @@ import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.team6.hangman.entity.User;
+import com.team6.hangman.entity.Users;
 
 
 public class JpaUserRepository implements UserRepository{
@@ -18,7 +18,7 @@ public class JpaUserRepository implements UserRepository{
 	}
 
 	@Override
-	public User signIn(User user) {
+	public Users signIn(Users user) {
 		em.persist(user);
 		return user;
 	}

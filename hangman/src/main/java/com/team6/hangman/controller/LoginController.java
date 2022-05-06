@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.team6.hangman.entity.User;
+import com.team6.hangman.entity.Users;
 import com.team6.hangman.service.UserService;
 
 
@@ -21,7 +21,7 @@ public class LoginController {
 	}
 
 	@PostMapping(value = "/log-in", consumes = "application/json")
-	public String logIn(@RequestBody User u) {
+	public String logIn(@RequestBody Users u) {
 		
 		System.out.println("Received ID: " + u.getId());
 		if(!userService.verifyId(u))
@@ -33,7 +33,7 @@ public class LoginController {
 	}
 	
 	@PostMapping(value = "/sign-in", consumes = "application/json")
-	public void create(@RequestBody User u) {
+	public void create(@RequestBody Users u) {
 		
 		System.out.println("New sign in: " + u.getId());
 		userService.signIn(u);
