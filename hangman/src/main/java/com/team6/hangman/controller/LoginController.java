@@ -9,8 +9,11 @@ import com.team6.hangman.entity.UserForm;
 import com.team6.hangman.entity.Users;
 import com.team6.hangman.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @RestController
+@Slf4j
 public class LoginController {
 	
 	private final UserService userService;
@@ -35,19 +38,24 @@ public class LoginController {
         return "login success";
     }
 
-    @PostMapping(value = "/sign-in", consumes = "application/json")
-    public void create(@RequestBody UserForm u) {
+    @PostMapping(value = "/sign-up", consumes = "application/json")
+    public String create(@RequestBody UserForm u) {
 
-        System.out.println("New user ID: " + u.getId());
-        System.out.println("New user PW: " + u.getPw());
-        System.out.println("New user NickName: " + u.getNickname());
+        //System.out.println("New user ID: " + u.getId());
+        //System.out.println("New user PW: " + u.getPw());
+        //System.out.println("New user NickName: " + u.getNickname());
+        
+        log.info("id : " + u.getId());
+        log.info("pw : " + u.getPw());
+        log.info("nickname : " + u.getNickname());
 
         Users newUser = new Users();
         newUser.setUser_id(u.getId());
         newUser.setUser_pw(u.getPw());
         newUser.setUser_nickname(u.getNickname());
 
-        userService.signIn(newUser);
+        String acceptedID = userService.signIn(newUser);
+        return "sign-up success";
     }
 	
 
