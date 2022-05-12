@@ -4,12 +4,17 @@ import javax.transaction.Transactional;
 
 import com.team6.hangman.entity.Users;
 import com.team6.hangman.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Optional;
 
 @Transactional
 public class UserService {
 	
 	private final UserRepository userRepository;
 
+    @Autowired
     public UserService(UserRepository userRepository) {
         super();
         this.userRepository = userRepository;
@@ -20,16 +25,11 @@ public class UserService {
         return users.getUser_id();
     }
 
-
-    public boolean verifyId(Users users) {
-        if(!userRepository.verifyId(users.getUser_id()))
-            return false;
-        return true;
+    public Optional<Users> findId(String user_id){
+        return userRepository.verifyId(user_id);
     }
 
-    public boolean verifyPw(Users users) {
-        if(!userRepository.verifyPw(users.getUser_pw()))
-            return false;
-        return true;
+    public Optional<Users> findPw(String user_pw){
+        return userRepository.verifyPw(user_pw);
     }
 }
