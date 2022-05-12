@@ -18,6 +18,8 @@ public class WebSocketHandler extends TextWebSocketHandler{
 	private List<Integer> gameroomNumbers = new ArrayList<Integer>();
 	private ObjectMapper objectMapper;
 	
+	private GameplayManager gameManager;
+	
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) {
@@ -30,7 +32,7 @@ public class WebSocketHandler extends TextWebSocketHandler{
 		
 		if(gameroomNumbers.indexOf(gameroomId) == -1) {
 			gameroomNumbers.add(gameroomId);
-			GameplayManager gameManager = new GameplayManager(gameroomId);
+			gameManager = new GameplayManager(gameroomId);
 		}
 		
 	}
@@ -43,7 +45,9 @@ public class WebSocketHandler extends TextWebSocketHandler{
 		GameplayDto gameplayDto = objectMapper.readValue(receivedMessage, GameplayDto.class);
 		
 		if (gameplayDto.getType().equals(GameplayDto.Type.ENTER)) {
-			
+			for (WebSocketSession player : players) {
+				player.sendMessage(new TextMessage(gameplayDto.getSender() + " entered!"));
+			}
 		}
 		else {
 			
