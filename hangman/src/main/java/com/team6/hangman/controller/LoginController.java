@@ -34,11 +34,10 @@ public class LoginController {
         log.info("pw: " + u.getUser_pw());
 
 
-        if(Optional.of(userService.findId(u.getUser_id())).isEmpty())
-            return "Error";
-
-        if(Optional.of(userService.findPw(u.getUser_pw())).isEmpty())
-            return "Error";
+        if(!Optional.of(userService.findId(u.getUser_id())).isPresent())
+            return "login fail ID";
+        if(!Optional.of(userService.findPw(u.getUser_pw())).isPresent())
+            return "login fail PW";
 
         return "login success";
     }
