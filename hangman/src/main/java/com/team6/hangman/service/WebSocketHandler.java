@@ -23,8 +23,7 @@ public class WebSocketHandler extends TextWebSocketHandler{
 	public void afterConnectionEstablished(WebSocketSession session) {
 		System.out.println("Player entered");
 		players.add(session);
-		//System.out.println("inside session:"+session);
-		//System.out.println(session.getUri().toString());
+		
 		String[] uriArray = session.getUri().toString().split("/");
 		gameroomId = Integer.valueOf(uriArray[4]);
 		System.out.println(gameroomId);
@@ -42,6 +41,13 @@ public class WebSocketHandler extends TextWebSocketHandler{
 		System.out.println(receivedMessage);
 		
 		GameplayDto gameplayDto = objectMapper.readValue(receivedMessage, GameplayDto.class);
+		
+		if (gameplayDto.getType().equals(GameplayDto.Type.ENTER)) {
+			
+		}
+		else {
+			
+		}
 		//GameplayManager gameManager = GameplayService.findManagerById(gameroomId);
 		//gameManager.handleActions();
 		
