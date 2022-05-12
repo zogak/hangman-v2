@@ -10,12 +10,12 @@ import com.team6.hangman.repository.UserRepository;
 import com.team6.hangman.service.UserService;
 
 @Configuration
-public class SpringConfig {
+public class LoginConfig {
 	
 	private EntityManager em;
 
     @Autowired
-    public SpringConfig(EntityManager em){
+    public LoginConfig(EntityManager em){
         this.em = em;
     }
 

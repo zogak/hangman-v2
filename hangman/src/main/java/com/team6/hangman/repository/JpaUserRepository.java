@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.team6.hangman.entity.Users;
 
+import java.util.Optional;
+
 
 public class JpaUserRepository implements UserRepository{
 
@@ -24,14 +26,14 @@ public class JpaUserRepository implements UserRepository{
     }
 
     @Override
-    public Boolean verifyId(String id) {
-        // TODO Auto-generated method stub
-        return null;
+    public Optional<Users> verifyId(String user_id) {
+        Users users = em.find(Users.class, user_id);
+        return Optional.ofNullable(users);
     }
 
     @Override
-    public Boolean verifyPw(String pw) {
-        // TODO Auto-generated method stub
-        return null;
+    public Optional<Users> verifyPw(String user_pw) {
+        Users users = em.find(Users.class, user_pw);
+        return Optional.ofNullable(users);
     }
 }

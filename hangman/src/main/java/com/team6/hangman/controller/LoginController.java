@@ -27,17 +27,16 @@ public class LoginController {
     @PostMapping(value = "/log-in", consumes = "application/json")
     public String logIn(@RequestBody Users u) {
 
-        System.out.println("Received ID: " + u.getUser_id());
-        System.out.println("Received PW: " + u.getUser_pw());
+        log.info("id: " + u.getUser_id());
+        log.info("pw: " + u.getUser_pw());
 
-        if(!userService.verifyId(u))
-            return "errorpage";
-        if(!userService.verifyPw(u))
-            return "errorpage";
+        userService.findId(u.getUser_id());
+        userService.findPw(u.getUser_pw());
 
         return "login success";
     }
 
+    /*
     @PostMapping(value = "/sign-up", consumes = "application/json")
     public String create(@RequestBody UserForm u) {
 
@@ -57,6 +56,8 @@ public class LoginController {
         String acceptedID = userService.signIn(newUser);
         return "sign-up success";
     }
+
+     */
 	
 
 }

@@ -2,32 +2,32 @@ package com.team6.hangman.entity;
 
 public class UserForm {
 	
-	private String id;
-    private String pw;
-    private String nickname;
+	private String user_id;
+    private String user_pw;
+    private String user_nickname;
 
-    public String getId() {
-        return id;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
-    public String getPw() {
-        return pw;
+    public String getUser_pw() {
+        return user_pw;
     }
 
-    public void setPw(String pw) {
-        this.pw = pw;
+    public void setUser_pw(String user_pw) {
+        this.user_pw = user_pw;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getUser_nickname() {
+        return user_nickname;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setUser_nickname(String user_nickname) {
+        this.user_nickname = user_nickname;
     }
 
 }
