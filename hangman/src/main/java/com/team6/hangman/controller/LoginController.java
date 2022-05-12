@@ -1,5 +1,6 @@
 package com.team6.hangman.controller;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +11,8 @@ import com.team6.hangman.entity.Users;
 import com.team6.hangman.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
 
 
 @RestController
@@ -30,8 +33,12 @@ public class LoginController {
         log.info("id: " + u.getUser_id());
         log.info("pw: " + u.getUser_pw());
 
-        userService.findId(u.getUser_id());
-        userService.findPw(u.getUser_pw());
+
+        if(Optional.of(userService.findId(u.getUser_id())).isEmpty())
+            return "Error";
+
+        if(Optional.of(userService.findPw(u.getUser_pw())).isEmpty())
+            return "Error";
 
         return "login success";
     }
