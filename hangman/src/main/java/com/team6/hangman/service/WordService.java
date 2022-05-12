@@ -17,4 +17,12 @@ public class WordService {
 		List<String> wordList = wordRepository.getWordsByWordCount(wordCount);
 		return wordList;
 	}
+	
+	public String getDefinitionOfWord(String word) {
+		return wordRepository.getWordByWord(word).getWordDescription();
+	}
+	
+	public String getHintOfWord(String word) {
+		return wordRepository.getWordByWord(word).getHint();
+	}
 }
