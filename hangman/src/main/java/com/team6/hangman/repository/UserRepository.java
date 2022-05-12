@@ -8,7 +8,5 @@ import java.util.Optional;
 public interface UserRepository {
 	
 	Users signIn(Users user);
-	Optional<Users> verifyId(String id);
-	Optional<Users> verifyPw(String pw);
 	
 }

@@ -25,15 +25,4 @@ public class JpaUserRepository implements UserRepository{
         return users;
     }
 
-    @Override
-    public Optional<Users> verifyId(String user_id) {
-        Users users = em.find(Users.class, user_id);
-        return Optional.ofNullable(users);
-    }
-
-    @Override
-    public Optional<Users> verifyPw(String user_pw) {
-        Users users = em.find(Users.class, user_pw);
-        return Optional.ofNullable(users);
-    }
 }

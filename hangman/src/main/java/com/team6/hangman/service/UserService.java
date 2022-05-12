@@ -25,11 +25,4 @@ public class UserService {
         return users.getUser_id();
     }
 
-    public Optional<Users> findId(String user_id){
-        return userRepository.verifyId(user_id);
-    }
-
-    public Optional<Users> findPw(String user_pw){
-        return userRepository.verifyPw(user_pw);
-    }
 }

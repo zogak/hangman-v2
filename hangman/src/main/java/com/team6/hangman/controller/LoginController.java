@@ -1,5 +1,6 @@
 package com.team6.hangman.controller;
 
+import com.team6.hangman.entity.UserDAO;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,51 +20,21 @@ import java.util.Optional;
 @Slf4j
 public class LoginController {
 	
-	private final UserService userService;
+	private final UserDAO userDAO;
 
     @Autowired
-    public LoginController(UserService userService){
-        super();
-        this.userService = userService;
+    public LoginController(UserDAO userDAO){
+        this.userDAO = userDAO;
     }
 
     @PostMapping(value = "/log-in", consumes = "application/json")
     public String logIn(@RequestBody Users u) {
 
-        log.info("id: " + u.getUser_id());
-        log.info("pw: " + u.getUser_pw());
-
-
-        if(!Optional.of(userService.findId(u.getUser_id())).isPresent())
-            return "login fail ID";
-        if(!Optional.of(userService.findPw(u.getUser_pw())).isPresent())
-            return "login fail PW";
-
-        return "login success";
+        int verification = userDAO.login(u.getUser_id(), u.getUser_pw());
+        System.out.println(verification);
+        if (verification == 1)
+            return "login success";
+        else
+            return "login fail";
     }
-
-    /*
-    @PostMapping(value = "/sign-up", consumes = "application/json")
-    public String create(@RequestBody UserForm u) {
-
-        //System.out.println("New user ID: " + u.getId());
-        //System.out.println("New user PW: " + u.getPw());
-        //System.out.println("New user NickName: " + u.getNickname());
-        
-        log.info("id : " + u.getId());
-        log.info("pw : " + u.getPw());
-        log.info("nickname : " + u.getNickname());
-
-        Users newUser = new Users();
-        newUser.setUser_id(u.getId());
-        newUser.setUser_pw(u.getPw());
-        newUser.setUser_nickname(u.getNickname());
-
-        String acceptedID = userService.signIn(newUser);
-        return "sign-up success";
-    }
-
-     */
-	
-
 }
