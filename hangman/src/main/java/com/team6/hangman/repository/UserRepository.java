@@ -8,5 +8,7 @@ import java.util.Optional;
 public interface UserRepository {
 	
 	Users signIn(Users user);
+	Optional<Users> findById(String user_id);
+	Optional<Users> findByNn(String user_nickname);
 	
 }

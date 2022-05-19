@@ -1,6 +1,7 @@
 package com.team6.hangman.controller;
 
 
+import com.team6.hangman.entity.UserDAO;
 import com.team6.hangman.entity.UserForm;
 import com.team6.hangman.entity.Users;
 import com.team6.hangman.service.UserService;
@@ -33,7 +34,21 @@ public class SignUpController {
         newUser.setUser_pw(u.getUser_pw());
         newUser.setUser_nickname(u.getUser_nickname());
 
+        try{
+            userService.validateDuplicateId(newUser);
+        } catch (IllegalStateException e){
+            return "duplicate ID";
+        }
+
+        try{
+            userService.validateDuplicateNn(newUser);
+        } catch (IllegalStateException e){
+            return "duplicate nickname";
+        }
+
+
         String acceptedID = userService.signIn(newUser);
+
         return "sign-up success";
     }
 
