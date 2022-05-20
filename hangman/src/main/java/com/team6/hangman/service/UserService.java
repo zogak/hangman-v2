@@ -36,5 +36,4 @@ public class UserService {
             throw new IllegalStateException("Duplicate NickName");
         });
     }
-
 }

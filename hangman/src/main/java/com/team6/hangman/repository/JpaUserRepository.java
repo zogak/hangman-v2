@@ -41,5 +41,4 @@ public class JpaUserRepository implements UserRepository{
                 .getResultList();
         return result.stream().findAny();
     }
-
 }

@@ -51,7 +51,4 @@ public class SignUpController {
 
         return "sign-up success";
     }
-
-
-
 }
