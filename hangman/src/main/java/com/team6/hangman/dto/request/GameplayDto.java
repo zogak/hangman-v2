@@ -7,11 +7,17 @@ import lombok.Setter;
 @Setter
 public class GameplayDto {
 	public enum Type {
-		ENTER, PLAY
+		START, WORD, TURN, PLAY
 	}
 	private Type type;
-	//private Integer gameroomId;
-	private String sender;
-	private Boolean isWord;
-	private String letter;
+	private Integer gameroomId;
+	
+	private String counterpart;
+	private String wordForCounterpart;
+	private Integer diceNumber;
+	
+	private Boolean isCorrect;
+	
+	//private Boolean isWord;
+	//private String letter;
 }
