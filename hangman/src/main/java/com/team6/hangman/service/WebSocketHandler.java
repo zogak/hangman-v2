@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.team6.hangman.repository.JpaUserRepository;
+import com.team6.hangman.repository.UserRepository;
 import org.springframework.web.socket.WebSocketSession;
 import org.json.simple.JSONObject;
 import org.springframework.web.socket.CloseStatus;
@@ -24,6 +26,7 @@ public class WebSocketHandler extends TextWebSocketHandler{
 	private String[] anonymousNickname = {"player1", "player2"};
 	private HashMap<String, String> targetWord = new HashMap<>(); //key : session id, value : target word
 	private HashMap<WebSocketSession, Integer> turn = new HashMap<>(); //key : session, value : dice num
+
 	
 	//private GameplayManager gameManager;
 	
@@ -180,7 +183,27 @@ public class WebSocketHandler extends TextWebSocketHandler{
 				}
 			}
 		}
-
+    
+		// If player win, add 1 point in leaderboard's win number
+		else if(gameplayDto.getType().equals(GameplayDto.Type.RESULT)){
+			Boolean isWin =  gameplayDto.getIsWin();
+			if(isWin){
+				for(WebSocketSession player : players.keySet()){
+					if(players.get(player).getGameroomId().equals(gameroomId)){
+						// 플레이어를 찾아야 함
+						player.sendMessage(new TextMessage("1"));
+					}
+				}
+			}
+			else{
+				for(WebSocketSession player : players.keySet()){
+					if(players.get(player).getGameroomId().equals(gameroomId)){
+						player.sendMessage(new TextMessage("-1"));
+					}
+				}
+			}
+		}
+		
 		else if(gameplayDto.getType().equals(GameplayDto.Type.EMOJI)) {
 			Integer emoji = gameplayDto.getEmoji();
 			
