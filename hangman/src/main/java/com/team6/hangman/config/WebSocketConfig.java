@@ -19,14 +19,14 @@ public class WebSocketConfig implements WebSocketConfigurer{
 		return new WebSocketHandler();
 	}
 
-	@Bean
-	public ChatSocketHandler chatSocketHandler(){
-		return new ChatSocketHandler();
-	}
+//	@Bean
+//	public ChatSocketHandler chatSocketHandler(){
+//		return new ChatSocketHandler();
+//	}
 
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		registry.addHandler(websocketHandler(), "/gameroom/*").setAllowedOrigins("*");
-		registry.addHandler(chatSocketHandler(), "/chat");
+		//registry.addHandler(chatSocketHandler(), "/chat");
 	}
 }

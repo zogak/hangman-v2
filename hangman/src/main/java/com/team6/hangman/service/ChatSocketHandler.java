@@ -19,12 +19,12 @@ public class ChatSocketHandler extends TextWebSocketHandler {
     public void handleTextMessage(WebSocketSession session, TextMessage message){
         String payload = message.getPayload();
         log.info("chat: "); log.info(payload);
-
+/**/
         try{
             for(String key : sessions.keySet()){ // 접속한 모든 세션에 메시지 전송
                 WebSocketSession ss = sessions.get(key);
                 ss.sendMessage(new TextMessage(payload));
-            }
+            } // 받은 메세지 중에서 emoji에 들어 있는 Key값만 뿌리자
         }catch (IOException e){
             e.printStackTrace();
         }

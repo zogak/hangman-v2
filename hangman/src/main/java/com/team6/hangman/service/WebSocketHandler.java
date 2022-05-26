@@ -180,7 +180,31 @@ public class WebSocketHandler extends TextWebSocketHandler{
 				}
 			}
 		}
-		
+
+		else if(gameplayDto.getType().equals(GameplayDto.Type.EMOJI)) {
+			Integer emoji = gameplayDto.getEmoji();
+			if (emoji == 1) {
+				for (WebSocketSession player : players.keySet()) {
+					if (players.get(player).getGameroomId().equals(gameroomId))
+						player.sendMessage(new TextMessage("1"));
+				}
+			} else if (emoji == 2) {
+				for (WebSocketSession player : players.keySet()) {
+					if (players.get(player).getGameroomId().equals(gameroomId))
+						player.sendMessage(new TextMessage("2"));
+				}
+			} else if (emoji == 3) {
+				for (WebSocketSession player : players.keySet()) {
+					if (players.get(player).getGameroomId().equals(gameroomId))
+						player.sendMessage(new TextMessage("3"));
+				}
+			} else if (emoji == 4) {
+				for (WebSocketSession player : players.keySet()) {
+					if (players.get(player).getGameroomId().equals(gameroomId))
+						player.sendMessage(new TextMessage("4"));
+				}
+			}
+		}
 	}
 	
 	@Override
