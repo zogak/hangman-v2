@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class GameplayDto {
 	public enum Type {
-		START, WORD, TURN, PLAY
+		CHECK, START, WORD, TURN, PLAY
 	}
 	private Type type;
 	private Integer gameroomId;
