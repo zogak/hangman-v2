@@ -180,8 +180,6 @@ public class WebSocketHandler extends TextWebSocketHandler{
 				}
 			}
 		}
-		//GameplayManager gameManager = GameplayService.findManagerById(gameroomId);
-		//gameManager.handleActions();
 		
 	}
 	
