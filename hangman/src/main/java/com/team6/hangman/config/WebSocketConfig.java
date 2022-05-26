@@ -1,6 +1,5 @@
 package com.team6.hangman.config;
 
-import com.team6.hangman.service.ChatSocketHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
