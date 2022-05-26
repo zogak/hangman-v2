@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class GameplayDto {
 	public enum Type {
-		CHECK, START, WORD, TURN, PLAY, RESULT
+		CHECK, START, WORD, TURN, PLAY, EMOJI, RESULT
 	}
 	private Type type;
 	private Integer gameroomId;
@@ -16,9 +16,10 @@ public class GameplayDto {
 	private String wordForCounterpart;
 	private String user_nickname;	// for leaderboard
 	private Integer diceNumber;
-	
 	private Boolean isCorrect;
 	private Boolean isWin;	// for leaderboard
+	private Integer emoji;
+
 	
 	//private Boolean isWord;
 	//private String letter;

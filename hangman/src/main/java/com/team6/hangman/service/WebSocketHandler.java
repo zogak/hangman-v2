@@ -183,7 +183,7 @@ public class WebSocketHandler extends TextWebSocketHandler{
 				}
 			}
 		}
-
+    
 		// If player win, add 1 point in leaderboard's win number
 		else if(gameplayDto.getType().equals(GameplayDto.Type.RESULT)){
 			Boolean isWin =  gameplayDto.getIsWin();
@@ -204,6 +204,14 @@ public class WebSocketHandler extends TextWebSocketHandler{
 			}
 		}
 		
+		else if(gameplayDto.getType().equals(GameplayDto.Type.EMOJI)) {
+			Integer emoji = gameplayDto.getEmoji();
+			
+			for (WebSocketSession player : players.keySet()) {
+				if (players.get(player).getGameroomId().equals(gameroomId))
+					player.sendMessage(new TextMessage(emoji.toString()));
+			}
+		}
 	}
 	
 	@Override

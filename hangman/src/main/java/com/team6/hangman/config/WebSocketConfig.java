@@ -11,14 +11,21 @@ import com.team6.hangman.service.WebSocketHandler;
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer{
-	
+
+
 	@Bean
 	public WebSocketHandler websocketHandler() {
 		return new WebSocketHandler();
 	}
 
+//	@Bean
+//	public ChatSocketHandler chatSocketHandler(){
+//		return new ChatSocketHandler();
+//	}
+
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		registry.addHandler(websocketHandler(), "/gameroom/*").setAllowedOrigins("*");
+		//registry.addHandler(chatSocketHandler(), "/chat");
 	}
 }
