@@ -15,7 +15,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team6.hangman.dto.TupleInfo;
 import com.team6.hangman.dto.request.GameplayDto;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class WebSocketHandler extends TextWebSocketHandler{
 	private HashMap<WebSocketSession, TupleInfo<Integer, String>> players = new HashMap<>(); //key:session, value:<gameroomId, nickName>
 	private HashMap<WebSocketSession, WebSocketSession> matching = new HashMap<>(); //key : me, value : counterpart
@@ -28,16 +30,19 @@ public class WebSocketHandler extends TextWebSocketHandler{
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) {
+		//give nick name to the entered players
 		
 		String[] uriArray = session.getUri().toString().split("/");
 		Integer gameroomId = Integer.valueOf(uriArray[4]);
-		System.out.println("gameroomId: " + gameroomId);
+		log.info("gameroomId: " + gameroomId);
 		boolean isPlayer2 = false;
 		String myNickname="";
 		
 		for (WebSocketSession key : players.keySet()) {
+			// counterpart already exists
 			if(players.get(key).getGameroomId().equals(gameroomId)) {
 				myNickname = anonymousNickname[1];
+				log.info("myNickname : " + myNickname);
 				players.put(session, new TupleInfo(gameroomId, myNickname));
 				isPlayer2 = true;
 				break;
@@ -45,65 +50,59 @@ public class WebSocketHandler extends TextWebSocketHandler{
 		}
 		if(!isPlayer2) {
 			myNickname = anonymousNickname[0];
+			log.info("myNickname : " + myNickname);
 			players.put(session, new TupleInfo(gameroomId, myNickname));
 		}
-		System.out.println("myNickname : " + myNickname);
-		//System.out.println(session);
-		//System.out.println(players.get(session).getGameroomId());
-		//System.out.println(players.get(session).getNickName());
 		
 	}
 	
 	@Override
 	public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String receivedMessage = message.getPayload();
-		System.out.println("receivedMessage:");
-		System.out.println(receivedMessage);
+		log.info("receivedMessage : ");
+		log.info(receivedMessage);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		GameplayDto gameplayDto = objectMapper.readValue(receivedMessage, GameplayDto.class);
 		Integer gameroomId = gameplayDto.getGameroomId();
-//		WebSocketSession counterpart;
-//		for (WebSocketSession key : players.keySet()) {
-//			if(players.get(key).equals(gameroomId) && !key.equals(session)) {
-//				counterpart = key;
-//			}
-//		}
 		
-		//JSONObject jsonObject = new JSONObject();
-		if (gameplayDto.getType().equals(GameplayDto.Type.START)) {
-			
-			WebSocketSession counterpart = null;
-			
-			for (Map.Entry<WebSocketSession, TupleInfo<Integer, String>> entry : players.entrySet()) {
-				WebSocketSession key = entry.getKey();
-				Integer value1 = entry.getValue().getGameroomId();
-				String value2 = entry.getValue().getNickName();
-				
-				if(value1.equals(gameroomId)) {
-					//jsonObject.put(key.getId().toString(), value2);
-					if(!key.equals(session)) {
-						counterpart = key;
+		if(gameplayDto.getType().equals(GameplayDto.Type.CHECK)) {
+			Integer count = 0;
+			for(WebSocketSession player : players.keySet()) {
+				if(players.get(player).getGameroomId().equals(gameroomId)) {
+					count += 1;
+					if(count.equals(2)) {
+						break;
 					}
 				}
 			}
 			
-			//save me-counterpart session info
-			matching.put(session, counterpart);
-			System.out.println(session);
-			System.out.println(counterpart);
+			if(count.equals(2)) {
+				for(WebSocketSession player : players.keySet()) {
+					if(players.get(player).getGameroomId().equals(gameroomId)) {
+						player.sendMessage(new TextMessage("Two players are in the gameroom. Start the game!"));
+					}
+				}
+			}
+		}
+		
+		else if (gameplayDto.getType().equals(GameplayDto.Type.START)) {			
+			WebSocketSession counterpart = getCounterpartSession(session, gameroomId);
 			
-			if (matching.containsKey(counterpart)) {
+			//counterpart already did the START
+			if(matching.containsKey(counterpart)) {
+				//save me-counterpart info
+				matching.put(session, counterpart);
+				
 				for (WebSocketSession player : players.keySet()) {
 					if (players.get(player).getGameroomId().equals(gameroomId)) {
-						//player.sendMessage(new TextMessage(jsonObject.toJSONString()));
-						player.sendMessage(new TextMessage("Choose the word!"));
+						player.sendMessage(new TextMessage("Players are ready. Choose the word!"));
 					}
 				}
 			}
-			
-			//session.sendMessage(new TextMessage(session.getId().toString()));
-			
+			//save me-counterpart info
+			matching.put(session, counterpart);
+					
 		}
 		else if (gameplayDto.getType().equals(GameplayDto.Type.WORD)) {
 			//String counterpart = gameplayDto.getCounterpart();
@@ -188,8 +187,28 @@ public class WebSocketHandler extends TextWebSocketHandler{
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-		System.out.println("Player left");
+		log.info("Player left");
 		players.remove(session);
+		matching.remove(session);
+		targetWord.remove(session.getId());
+		turn.remove(session);
+	}
+	
+	public WebSocketSession getCounterpartSession(WebSocketSession mySession, Integer gameroomId) {
+		WebSocketSession counterpart = null;
+		
+		for (Map.Entry<WebSocketSession, TupleInfo<Integer, String>> entry : players.entrySet()) {
+			WebSocketSession key = entry.getKey();
+			Integer value1 = entry.getValue().getGameroomId();
+			String value2 = entry.getValue().getNickName();
+			
+			if(value1.equals(gameroomId)) {
+				if(!key.equals(mySession)) {
+					counterpart = key;
+				}
+			}
+		}
+		return counterpart;
 	}
 
 }
