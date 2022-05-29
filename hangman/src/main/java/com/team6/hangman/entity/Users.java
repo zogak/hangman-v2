@@ -13,8 +13,8 @@ public class Users {
     private String user_pw;
     private String user_nickname;
 
-    private int user_win;
-    private int user_lose;
+    //private int user_win;
+    //private int user_lose;
 
     public String getUser_id() {
         return user_id;
@@ -35,8 +35,8 @@ public class Users {
         this.user_nickname = user_nickname;
     }
 
-    public int getUser_win(){return user_win;}
-    public void setUser_win(int user_win){this.user_win = user_win;}
-    public int getUser_lose(){return user_lose;}
-    public void setUser_lose(int user_lose){this.user_lose = user_lose;}
+    //public int getUser_win(){return user_win;}
+    //public void setUser_win(int user_win){this.user_win = user_win;}
+    //public int getUser_lose(){return user_lose;}
+    //public void setUser_lose(int user_lose){this.user_lose = user_lose;}
 }
