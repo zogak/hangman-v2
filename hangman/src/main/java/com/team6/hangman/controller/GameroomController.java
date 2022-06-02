@@ -1,5 +1,7 @@
 package com.team6.hangman.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,9 +31,15 @@ public class GameroomController {
 		return new ResponseEntity<>(responseService.getSingleResult("Gameroom"+createdRoomId+" is created"), HttpStatus.OK);
 	}
 	
+//DEPRECATED	
+//	@GetMapping("/gameroom")
+//	public ResponseEntity<ListResult<GameroomResponseDto>> getGameroom(){
+//		return new ResponseEntity<>(responseService.getListResult(gameroomService.getAllGameroom()), HttpStatus.OK);
+//	}
+	
 	@GetMapping("/gameroom")
-	public ResponseEntity<ListResult<GameroomResponseDto>> getGameroom(){
-		return new ResponseEntity<>(responseService.getListResult(gameroomService.getAllGameroom()), HttpStatus.OK);
+	public List<GameroomResponseDto> getGameroom(){
+		return gameroomService.getAllGameroom();
 	}
 	
 }
