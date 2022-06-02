@@ -32,6 +32,7 @@ public class GameroomService {
 	
 	public GameroomResponseDto toGameroomResponseDto(Gameroom gameroom) {
 		return GameroomResponseDto.builder()
+				.gameroomId(gameroom.getId())
 				.title(gameroom.getTitle())
 				.wordCount(gameroom.getWordCount())
 				.playerCount(gameroom.getPlayerCount())
