@@ -28,6 +28,7 @@ public class WebSocketHandler extends TextWebSocketHandler{
 	private HashMap<WebSocketSession, Integer> turn = new HashMap<>(); //key : session, value : dice num
 
 	private final ScoreService scoreService;
+	private final GameroomService gameroomService;
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) {
@@ -224,11 +225,27 @@ public class WebSocketHandler extends TextWebSocketHandler{
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-		log.info("Player left");
+		Integer gameroomId = players.get(session).getGameroomId();
+		String userNickname = players.get(session).getNickName();
+		Integer cnt = 0;
+		log.info("Player " + userNickname + " left");
+		
+		for (WebSocketSession player : players.keySet()) {
+			if(players.get(player).getGameroomId().equals(gameroomId)) {
+				cnt += 1;
+			}
+		}
+		if (cnt.equals(1)) {
+			//last person in room
+			System.out.println("last person in the room");
+			gameroomService.deleteGameroom(gameroomId.longValue());
+		}
+		
 		players.remove(session);
 		matching.remove(session);
 		targetWord.remove(session.getId());
 		turn.remove(session);
+		
 	}
 	
 	public WebSocketSession getCounterpartSession(WebSocketSession mySession, Integer gameroomId) {

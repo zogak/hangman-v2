@@ -49,4 +49,8 @@ public class GameroomService {
 	
 	}
 	
+	public void deleteGameroom(Long gameroomId) {
+		gameroomRepository.deleteById(gameroomId);
+	}
+	
 }
