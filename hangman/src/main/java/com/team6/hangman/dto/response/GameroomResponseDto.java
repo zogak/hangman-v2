@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GameroomResponseDto {
+	private long gameroomId;
 	private String title;
 	private Integer wordCount;
 	private Integer playerCount;
