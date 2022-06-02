@@ -218,7 +218,7 @@ public class WebSocketHandler extends TextWebSocketHandler{
 			
 			for (WebSocketSession player : players.keySet()) {
 				if (players.get(player).getGameroomId().equals(gameroomId))
-					player.sendMessage(new TextMessage(emoji.toString()));
+					player.sendMessage(new TextMessage("{ \"type\" : \"EMOJI\", \"emoji\":" + emoji.toString() + " }"));
 			}
 		}
 	}
