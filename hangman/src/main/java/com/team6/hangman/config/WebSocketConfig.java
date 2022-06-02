@@ -6,26 +6,27 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+import com.team6.hangman.service.GameroomService;
+import com.team6.hangman.service.ScoreService;
 import com.team6.hangman.service.WebSocketHandler;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSocket
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer{
-
-
+	private final ScoreService scoreService;
+	private final GameroomService gameroomService;
+	
 	@Bean
 	public WebSocketHandler websocketHandler() {
-		return new WebSocketHandler();
+		return new WebSocketHandler(scoreService, gameroomService);
 	}
-
-//	@Bean
-//	public ChatSocketHandler chatSocketHandler(){
-//		return new ChatSocketHandler();
-//	}
+	//private final WebSocketHandler webSocketHandler;
 
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		registry.addHandler(websocketHandler(), "/gameroom/*").setAllowedOrigins("*");
-		//registry.addHandler(chatSocketHandler(), "/chat");
 	}
 }

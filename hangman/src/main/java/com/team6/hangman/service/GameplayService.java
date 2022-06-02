@@ -1,12 +1,17 @@
-//package com.team6.hangman.service;
-//
-//import java.util.ArrayList;
-//
-//import org.springframework.stereotype.Service;
-//
-//@Service
-//public class GameplayService {
-//	
+package com.team6.hangman.service;
+
+import java.util.ArrayList;
+
+import org.springframework.stereotype.Service;
+
+import com.team6.hangman.repository.ScoreRepository;
+
+import lombok.AllArgsConstructor;
+
+@Service
+@AllArgsConstructor
+public class GameplayService {
+
 //	public GameplayManager findManagerById(Integer gameroomId) {
 //		return null;
 //	}
@@ -29,4 +34,4 @@
 //		
 //		return null;
 //	}
-//}
+}

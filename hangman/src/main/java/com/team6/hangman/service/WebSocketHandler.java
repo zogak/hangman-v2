@@ -1,14 +1,12 @@
 package com.team6.hangman.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.team6.hangman.repository.JpaUserRepository;
-import com.team6.hangman.repository.UserRepository;
 import org.springframework.web.socket.WebSocketSession;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -17,20 +15,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team6.hangman.dto.TupleInfo;
 import com.team6.hangman.dto.request.GameplayDto;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 public class WebSocketHandler extends TextWebSocketHandler{
-	private HashMap<WebSocketSession, TupleInfo<Integer, String>> players = new HashMap<>(); //key:session, value:<gameroomId, nickName>
+	private HashMap<WebSocketSession, TupleInfo<Integer, String>> players = new HashMap<>(); //key:session, value:<gameroomId, nickName(later userId)>
 	private HashMap<WebSocketSession, WebSocketSession> matching = new HashMap<>(); //key : me, value : counterpart
 	private String[] anonymousNickname = {"player1", "player2"};
 	private HashMap<String, String> targetWord = new HashMap<>(); //key : session id, value : target word
 	private HashMap<WebSocketSession, Integer> turn = new HashMap<>(); //key : session, value : dice num
 
-	
-	//private GameplayManager gameManager;
-	
-	
+	private final ScoreService scoreService;
+	private final GameroomService gameroomService;
+
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) {
 		//give nick name to the entered players
@@ -89,7 +88,10 @@ public class WebSocketHandler extends TextWebSocketHandler{
 			}
 		}
 		
-		else if (gameplayDto.getType().equals(GameplayDto.Type.START)) {			
+		else if (gameplayDto.getType().equals(GameplayDto.Type.START)) {
+			//change anonymous nickname to userId
+			players.get(session).setNickName(gameplayDto.getUserId());
+			
 			WebSocketSession counterpart = getCounterpartSession(session, gameroomId);
 			
 			//counterpart already did the START
@@ -186,22 +188,29 @@ public class WebSocketHandler extends TextWebSocketHandler{
     
 		// If player win, add 1 point in leaderboard's win number
 		else if(gameplayDto.getType().equals(GameplayDto.Type.RESULT)){
-			Boolean isWin =  gameplayDto.getIsWin();
-			if(isWin){
-				for(WebSocketSession player : players.keySet()){
-					if(players.get(player).getGameroomId().equals(gameroomId)){
-						// 플레이어를 찾아야 함
-						player.sendMessage(new TextMessage("1"));
+			String winner =  gameplayDto.getWinner(); //userId of the winner
+			String loser = "";
+			boolean isMyWin = false;
+			
+			//my win
+			if (players.get(session).getNickName().equals(winner)) {
+				isMyWin = true;
+				loser = players.get(matching.get(session)).getNickName();
+			}
+			
+			//counterpart's win
+			if(!isMyWin) {
+				loser = players.get(session).getNickName();
+			}
+			
+			if (scoreService.saveResult(winner, loser)) {
+				for(WebSocketSession player : players.keySet()) {
+					if(players.get(player).getGameroomId().equals(gameroomId)) {
+						player.sendMessage(new TextMessage("The winner is : " + winner));
 					}
 				}
 			}
-			else{
-				for(WebSocketSession player : players.keySet()){
-					if(players.get(player).getGameroomId().equals(gameroomId)){
-						player.sendMessage(new TextMessage("-1"));
-					}
-				}
-			}
+			
 		}
 		
 		else if(gameplayDto.getType().equals(GameplayDto.Type.EMOJI)) {
@@ -216,11 +225,27 @@ public class WebSocketHandler extends TextWebSocketHandler{
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-		log.info("Player left");
+		Integer gameroomId = players.get(session).getGameroomId();
+		String userNickname = players.get(session).getNickName();
+		Integer cnt = 0;
+		log.info("Player " + userNickname + " left");
+		
+		for (WebSocketSession player : players.keySet()) {
+			if(players.get(player).getGameroomId().equals(gameroomId)) {
+				cnt += 1;
+			}
+		}
+		if (cnt.equals(1)) {
+			//last person in room
+			System.out.println("last person in the room");
+			gameroomService.deleteGameroom(gameroomId.longValue());
+		}
+		
 		players.remove(session);
 		matching.remove(session);
 		targetWord.remove(session.getId());
 		turn.remove(session);
+		
 	}
 	
 	public WebSocketSession getCounterpartSession(WebSocketSession mySession, Integer gameroomId) {

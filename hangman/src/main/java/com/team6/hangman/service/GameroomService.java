@@ -20,15 +20,14 @@ import lombok.RequiredArgsConstructor;
 public class GameroomService {
 	private GameroomRepository gameroomRepository;
 
-	public boolean createGameroom(GameroomRequestDto gameroomDto) {
+	public Gameroom createGameroom(GameroomRequestDto gameroomDto) {
 		Gameroom gameroom = Gameroom.builder()
 				.title(gameroomDto.getTitle())
 				.wordCount(gameroomDto.getWordCount())
 				.gameCharacter(gameroomDto.getGameCharacter())
 				.build();
 		
-		gameroomRepository.save(gameroom);
-		return true;
+		return gameroomRepository.save(gameroom);
 	}
 	
 	public GameroomResponseDto toGameroomResponseDto(Gameroom gameroom) {
@@ -48,6 +47,10 @@ public class GameroomService {
 		}
 		return gameroomListResponse;
 	
+	}
+	
+	public void deleteGameroom(Long gameroomId) {
+		gameroomRepository.deleteById(gameroomId);
 	}
 	
 }

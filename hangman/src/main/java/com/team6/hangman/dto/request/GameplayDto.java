@@ -17,8 +17,9 @@ public class GameplayDto {
 	private String user_nickname;	// for leaderboard
 	private Integer diceNumber;
 	private Boolean isCorrect;
-	private Boolean isWin;	// for leaderboard
+	private String winner;	// for leaderboard
 	private Integer emoji;
+	private String userId;
 
 	
 	//private Boolean isWord;

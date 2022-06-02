@@ -25,8 +25,8 @@ public class GameroomController {
 	
 	@PostMapping("/gameroom")
 	public ResponseEntity<SingleResult<String>> createRoom(@RequestBody GameroomRequestDto gameroomDto) {
-		gameroomService.createGameroom(gameroomDto);
-		return new ResponseEntity<>(responseService.getSingleResult("Gameroom created"), HttpStatus.OK);
+		long createdRoomId = gameroomService.createGameroom(gameroomDto).getId();
+		return new ResponseEntity<>(responseService.getSingleResult("Gameroom"+createdRoomId+" is created"), HttpStatus.OK);
 	}
 	
 	@GetMapping("/gameroom")
@@ -34,8 +34,4 @@ public class GameroomController {
 		return new ResponseEntity<>(responseService.getListResult(gameroomService.getAllGameroom()), HttpStatus.OK);
 	}
 	
-//	@GetMapping("/gameroom/{roomId}")
-//	public void getIndividualGameroom(@PathVariable Integer roomId) {
-//		
-//	}
 }

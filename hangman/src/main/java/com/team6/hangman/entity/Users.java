@@ -13,7 +13,6 @@ public class Users {
     private String user_pw;
     private String user_nickname;
 
-
     public String getUser_id() {
         return user_id;
     }
@@ -32,5 +31,4 @@ public class Users {
     public void setUser_nickname(String user_nickname) {
         this.user_nickname = user_nickname;
     }
-
 }
