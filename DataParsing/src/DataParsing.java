@@ -9,14 +9,16 @@ import java.util.Arrays;
 
 public class DataParsing {
     public static void main(String[] args) throws IOException, ParseException {
-        // Using BufferReader
+        // Read text file using BufferReader
         BufferedReader reader = new BufferedReader(new FileReader("/Users/johyeongchan/MSEProject/hanman-server/hangman_dictionary.txt"));
+        System.out.println("Success file reading!");
+
+
+        // Store each json type string to Arraylist
         String jsonStringWithComma;
         ArrayList<String> arrayList = new ArrayList<>();
         ArrayList<String> arrayListAfterRemove = new ArrayList<>();
-        System.out.println("Success file reading!");
 
-        // Store each json type string to Arraylist
         while((jsonStringWithComma = reader.readLine()) != null){
             arrayList.add(jsonStringWithComma);
         }
@@ -42,21 +44,27 @@ public class DataParsing {
         JSONParser jsonParser = new JSONParser();
         for(int i =0; i<arrayListAfterRemove.size(); i++){
             jsonObjectBefore = (JSONObject) jsonParser.parse(arrayListAfterRemove.get(i));
-            jsonObjectAfter.put("id", i);
-            jsonObjectAfter.put("word", jsonObjectBefore.get("word"));
-            jsonObjectAfter.put("wordDescription", jsonObjectBefore.get("definition"));
-            jsonObjectAfter.put("hint", "no hint");
-            jsonObjectAfter.put("wordCount", jsonObjectBefore.get("word").toString().length());
-
-            jsonArray.add(jsonObjectAfter);
-            System.out.println(jsonObjectAfter);
-            //System.out.println(jsonArray.get(i));
+            addToJSONOArray(jsonArray, jsonObjectBefore, i);
         }
         System.out.println("Success adding JSONObject to JSONArray");
 
         // Make JSON file from JSONArray
         makeJSONFile(jsonArray);
         System.out.println("Success making JSON file from JSONArray!");
+    }
+
+    // Method that distinguish word and add to jsonArray
+    public static void addToJSONOArray(JSONArray jsonArray, JSONObject jsonObjectBefore, int i){
+        JSONObject jsonObjectAfter = new JSONObject();
+        // If word's length is between 3 and 10, add to jsonArray
+        if(jsonObjectBefore.get("word").toString().length()>=3 && jsonObjectBefore.get("word").toString().length()<11){
+            jsonObjectAfter.put("id", i);
+            jsonObjectAfter.put("word", jsonObjectBefore.get("word"));
+            jsonObjectAfter.put("wordDescription", jsonObjectBefore.get("definition"));
+            jsonObjectAfter.put("hint", "no hint");
+            jsonObjectAfter.put("wordCount", jsonObjectBefore.get("word").toString().length());
+            jsonArray.add(jsonObjectAfter);
+        }
     }
 
     // Method that makes JSON file from JSONArray
@@ -70,8 +78,8 @@ public class DataParsing {
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 
-        for(int i =0; i<jsonArray.size(); i++){
-            //System.out.println(jsonArray.get(i));
+        for(int i =0; i<50; i++){
+            System.out.println(jsonArray.get(i));
             writer.write(jsonArray.get(i).toString());
             writer.newLine();
         }
