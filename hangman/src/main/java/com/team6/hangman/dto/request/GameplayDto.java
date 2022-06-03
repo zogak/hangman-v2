@@ -21,7 +21,4 @@ public class GameplayDto {
 	private Integer emoji;
 	private String userId;
 
-	
-	//private Boolean isWord;
-	//private String letter;
 }
