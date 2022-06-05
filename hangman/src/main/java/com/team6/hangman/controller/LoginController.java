@@ -30,8 +30,8 @@ public class LoginController {
     @PostMapping(value = "/log-in", consumes = "application/json")
     public String logIn(@RequestBody Users u) {
 
-        int verification = userDAO.login(u.getUser_id(), u.getUser_pw());
-        System.out.println(verification);
+        Integer verification = userDAO.login(u.getUser_id(), u.getUser_pw());
+        log.info(verification.toString());
         if (verification == 1)
             return "login success";
         else
