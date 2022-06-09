@@ -120,7 +120,7 @@ public class WebSocketHandler extends TextWebSocketHandler{
 			for (WebSocketSession player : players.keySet()) {
 				if (players.get(player).getGameroomId().equals(gameroomId) && !player.equals(session)) {
 					player.sendMessage(new TextMessage("{ \"type\" : \"WORD\", \"gameroomId\": " + gameplayDto.getGameroomId() + "," +
-							"\"wordForCounterpart\":" + wordForCounterpart.toString() + " }"));
+							"\"wordForCounterpart\": " +'"'+ wordForCounterpart +'"'+ " }"));
 				}
 			}
 			
