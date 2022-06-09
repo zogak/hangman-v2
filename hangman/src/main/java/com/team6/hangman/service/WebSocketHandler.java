@@ -172,14 +172,14 @@ public class WebSocketHandler extends TextWebSocketHandler{
 			Boolean isCorrect = gameplayDto.getIsCorrect();
 			if (isCorrect) {
 				for (WebSocketSession player : players.keySet()) {
-					if (players.get(player).getGameroomId().equals(gameroomId)) {
+					if (players.get(player).getGameroomId().equals(gameroomId) && !player.equals(session)) {
 						player.sendMessage(new TextMessage("1"));
 					}
 				}
 			}
 			else {
 				for (WebSocketSession player : players.keySet()) {
-					if (players.get(player).getGameroomId().equals(gameroomId)) {
+					if (players.get(player).getGameroomId().equals(gameroomId) && !player.equals(session)) {
 						player.sendMessage(new TextMessage("-1"));
 					}
 				}
@@ -188,18 +188,17 @@ public class WebSocketHandler extends TextWebSocketHandler{
     
 		// If player win, add 1 point in leaderboard's win number
 		else if(gameplayDto.getType().equals(GameplayDto.Type.RESULT)){
-			String winner =  gameplayDto.getWinner(); //userId of the winner
+			String winnerFromMsg =  gameplayDto.getWinner(); // "my" or "other"
+			String winner ="";
 			String loser = "";
-			boolean isMyWin = false;
 			
-			//my win
-			if (players.get(session).getNickName().equals(winner)) {
-				isMyWin = true;
+			if (winnerFromMsg.equals("my")){
+				winner = players.get(session).getNickName();
 				loser = players.get(matching.get(session)).getNickName();
 			}
 			
-			//counterpart's win
-			if(!isMyWin) {
+			else if (winnerFromMsg.equals("other")) {
+				winner = players.get(matching.get(session)).getNickName();
 				loser = players.get(session).getNickName();
 			}
 			
@@ -217,7 +216,7 @@ public class WebSocketHandler extends TextWebSocketHandler{
 			Integer emoji = gameplayDto.getEmoji();
 			
 			for (WebSocketSession player : players.keySet()) {
-				if (players.get(player).getGameroomId().equals(gameroomId))
+				if (players.get(player).getGameroomId().equals(gameroomId) && !player.equals(session))
 					player.sendMessage(new TextMessage("{ \"type\" : \"EMOJI\", \"emoji\":" + emoji.toString() + " }"));
 			}
 		}
