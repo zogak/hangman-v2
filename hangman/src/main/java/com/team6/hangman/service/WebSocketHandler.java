@@ -116,7 +116,15 @@ public class WebSocketHandler extends TextWebSocketHandler{
 			
 			targetWord.put(counterpart, wordForCounterpart);
 			
-			//TODO 둘 다 던졌을 때만 리턴
+			//1st message
+			for (WebSocketSession player : players.keySet()) {
+				if (players.get(player).getGameroomId().equals(gameroomId) && !player.equals(session)) {
+					player.sendMessage(new TextMessage("{ \"type\" : \"WORD\", \"gameroomId\": " + gameplayDto.getGameroomId() + "," +
+							"\"wordForCounterpart\":" + wordForCounterpart.toString() + " }"));
+				}
+			}
+			
+			//2nd message, 둘 다 던졌을 때만 리턴
 			if (targetWord.containsKey(session.getId().toString())) {
 				for (WebSocketSession player : players.keySet()) {
 					if (players.get(player).getGameroomId().equals(gameroomId)) {
@@ -130,6 +138,15 @@ public class WebSocketHandler extends TextWebSocketHandler{
 			Integer myDice = gameplayDto.getDiceNumber();
 			WebSocketSession counterpart = matching.get(session);
 			Integer order = 0; //0:me first, 1:draw 2:you first
+			
+			//1st message (counterpart's dice Number)
+			for (WebSocketSession player : players.keySet()) {
+				if (players.get(player).getGameroomId().equals(gameroomId) && !player.equals(session)) {
+					player.sendMessage(new TextMessage("counterpart's dice number : " + myDice));
+				}
+			}
+			
+			//2nd message
 			//info exists in hashmap turn
 			if (turn.containsKey(counterpart)) {
 				Integer counterpartDice = turn.get(counterpart);
