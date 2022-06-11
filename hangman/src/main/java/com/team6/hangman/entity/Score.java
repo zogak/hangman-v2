@@ -1,7 +1,5 @@
 package com.team6.hangman.entity;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,7 +21,8 @@ public class Score {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String user_id;
+	private String userId;
 	private Integer win;
 	private Integer lose;
+	private Integer score;
 }
