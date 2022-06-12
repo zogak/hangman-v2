@@ -34,6 +34,8 @@ public class LoginController {
         log.info(verification.toString());
         if (verification == 1)
             return "login success";
+        else if(verification == -2)
+            return "connection error";
         else
             return "login fail";
     }
