@@ -233,8 +233,9 @@ public class WebSocketHandler extends TextWebSocketHandler{
 			Integer emoji = gameplayDto.getEmoji();
 			
 			for (WebSocketSession player : players.keySet()) {
-				if (players.get(player).getGameroomId().equals(gameroomId) && !player.equals(session))
+				if (players.get(player).getGameroomId().equals(gameroomId) && !player.equals(session)) {
 					player.sendMessage(new TextMessage("{ \"type\" : \"EMOJI\", \"emoji\":" + emoji.toString() + " }"));
+				}
 			}
 		}
 	}
@@ -261,7 +262,6 @@ public class WebSocketHandler extends TextWebSocketHandler{
 		matching.remove(session);
 		targetWord.remove(session.getId());
 		turn.remove(session);
-		
 	}
 	
 	public WebSocketSession getCounterpartSession(WebSocketSession mySession, Integer gameroomId) {
