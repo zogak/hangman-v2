@@ -28,5 +28,4 @@ public class LoginConfig {
     public UserRepository userRepository(){
         return new JpaUserRepository(em);
     }
-
 }
